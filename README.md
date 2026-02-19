@@ -1,13 +1,13 @@
-# 1Password Starfield
+# 1p Starfield
 
-An animated ASCII starfield with the 1Password logo and floating security/dev icons. Pure ANSI, zero dependencies—just Node.js and your terminal.
+An animated ASCII starfield with the 1p logo and floating security/dev icons. Pure ANSI, zero dependencies—just Node.js and your terminal.
 
-![1Password Starfield](starfield.png)
+![1p Starfield](starfield.png)
 
 ## Features
 
 - **Warp-speed starfield** — Stars rush toward you in classic sci-fi style
-- **1Password logo** — Centered ASCII art of the 1Password shield
+- **1p logo** — Centered ASCII art of the 1p shield
 - **Floating icons** — Lock, shield, key, cloud, server, code, gear, chart, globe, and window sprites drift across the screen
 - **Deterministic playback** — Use a seed for reproducible animations
 - **ANSI-only** — No heavy dependencies, works in any terminal
@@ -20,7 +20,7 @@ An animated ASCII starfield with the 1Password logo and floating security/dev ic
 ## Usage
 
 ```bash
-node warp_1password_ascii.js
+node warp_1p_ascii.js
 ```
 
 Press `Ctrl+C` to exit.
@@ -39,16 +39,16 @@ Press `Ctrl+C` to exit.
 
 ```bash
 # Default run
-node warp_1password_ascii.js
+node warp_1p_ascii.js
 
 # With unicode stars
-node warp_1password_ascii.js --unicode
+node warp_1p_ascii.js --unicode
 
 # Deterministic "replay" with the same seed
-node warp_1password_ascii.js --seed=42
+node warp_1p_ascii.js --seed=42
 
 # Custom dimensions (e.g. for recording)
-node warp_1password_ascii.js --width=120 --height=30
+node warp_1p_ascii.js --width=120 --height=30
 ```
 
 ## How It Works

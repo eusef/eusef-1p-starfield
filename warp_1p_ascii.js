@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * warp_1password_ascii.js
- * Animated ASCII starfield with 1Password logo and floating security/dev icons.
+ * warp_1p_ascii.js
+ * Animated ASCII starfield with 1p logo and floating security/dev icons.
  * Deterministic playback when seeded. ANSI-only, no heavy dependencies.
  */
 
@@ -98,7 +98,7 @@ function starGlyph(z, unicode) {
   return unicode ? '✦' : '#';
 }
 
-// --- 1Password Logo (raw ASCII art, used as-is) ---
+// --- 1p Logo (raw ASCII art, used as-is) ---
 const LOGO_RAW = `
                                     :=+**####%%%%#####**=-
                                   -*##%%%%%%%%%%%%%%%%%%%%%%%%%#*+:
@@ -240,7 +240,7 @@ function main() {
 
   for (const arg of args) {
     if (arg === '--help' || arg === '-h') {
-      console.log(`Usage: node warp_1password_ascii.js [options]
+      console.log(`Usage: node warp_1p_ascii.js [options]
 Options:
   --unicode, -u     Use unicode glyphs (✦ for near stars)
   --seed=N          PRNG seed for deterministic playback (default: ${DEFAULT_SEED})
