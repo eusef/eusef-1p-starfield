@@ -2,6 +2,8 @@
 
 An animated ASCII starfield with the 1Password logo and floating security/dev icons. Pure ANSI, zero dependencies—just Node.js and your terminal.
 
+![1Password Starfield](starfield.png)
+
 ## Features
 
 - **Warp-speed starfield** — Stars rush toward you in classic sci-fi style
