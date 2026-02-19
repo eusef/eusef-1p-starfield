@@ -256,20 +256,21 @@ Options:
   }
 
   if (process.stdout.columns && process.stdout.rows) {
-    width = args.includes('--width=') ? width : process.stdout.columns;
-    height = args.includes('--height=') ? height : process.stdout.rows;
+    if (!args.some((a) => a.startsWith('--width='))) width = process.stdout.columns;
+    if (!args.some((a) => a.startsWith('--height='))) height = process.stdout.rows;
   }
 
+  const useFixedDimensions = args.some((a) => a.startsWith('--width=')) || args.some((a) => a.startsWith('--height='));
   const prng = createPRNG(seed);
-  const canvas = createCanvas(width, height);
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const scaleX = width * SCALE_X_FACTOR;
-  const scaleY = height * SCALE_Y_FACTOR;
-  const numStars = Math.min(1200, Math.floor((width * height) / 18));
-  const spawnRadius = getSpawnRadius(width, height);
-
   const logoLines = prepareLogo(LOGO_RAW);
+
+  let canvas = createCanvas(width, height);
+  let centerX = width / 2;
+  let centerY = height / 2;
+  let scaleX = width * SCALE_X_FACTOR;
+  let scaleY = height * SCALE_Y_FACTOR;
+  let numStars = Math.min(1200, Math.floor((width * height) / 18));
+  let spawnRadius = getSpawnRadius(width, height);
 
   const stars = [];
   for (let i = 0; i < numStars; i++) stars.push(createStar(prng));
@@ -279,15 +280,38 @@ Options:
     objects.push(createSpriteObject(prng, centerX, centerY, spawnRadius, scaleX, scaleY));
   }
 
+  function applyDimensions(w, h) {
+    width = w;
+    height = h;
+    canvas = createCanvas(width, height);
+    centerX = width / 2;
+    centerY = height / 2;
+    scaleX = width * SCALE_X_FACTOR;
+    scaleY = height * SCALE_Y_FACTOR;
+    numStars = Math.min(1200, Math.floor((width * height) / 18));
+    spawnRadius = getSpawnRadius(width, height);
+  }
+
+  function handleResize() {
+    if (useFixedDimensions || !process.stdout.columns || !process.stdout.rows) return;
+    const w = process.stdout.columns;
+    const h = process.stdout.rows;
+    applyDimensions(w, h);
+    while (stars.length < numStars) stars.push(createStar(prng));
+    while (stars.length > numStars) stars.pop();
+    for (let i = 0; i < objects.length; i++) {
+      Object.assign(objects[i], createSpriteObject(prng, centerX, centerY, spawnRadius, scaleX, scaleY));
+    }
+    process.stdout.write('\x1b[2J\x1b[H');
+  }
+
   process.stdout.write('\x1b[?25l');
   process.stdout.write('\x1b[2J');
 
   const dt = 1 / FPS;
   let t = 0;
-  let lastFrame = 0;
 
   function render() {
-    lastFrame = Date.now();
     t += dt;
 
     for (let i = 0; i < stars.length; i++) {
@@ -307,7 +331,6 @@ Options:
   }
 
   const interval = setInterval(render, 1000 / FPS);
-  lastFrame = Date.now();
 
   function cleanup() {
     clearInterval(interval);
@@ -318,6 +341,7 @@ Options:
 
   process.on('SIGINT', cleanup);
   process.on('SIGTERM', cleanup);
+  process.on('SIGWINCH', handleResize);
 }
 
 main();
